@@ -1,6 +1,6 @@
 from aocd import get_data
 data = get_data(day=1)
-dn = [int(d) for d in data.split('\n')]
+dn = [int(d) for d in data.splitlines()]
 
 def part1(data):
     data.sort()
