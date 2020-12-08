@@ -1,29 +1,41 @@
 from aocd import get_data
+from copy import deepcopy
 data = get_data(day=8).split("\n")
 data = [line.split() for line in data]
 [line.append(0) for line in data]
-addr,accm = 0,0
-while True:
-    inlen = len(data)
-    op,val,inc = data[addr]
-    print (op,val,inc)
-    if inc == 1:
-        break
-    data[addr][2] += 1
-    if op == "jmp":
-        if addr == inlen-2:
-            addr+=1
-        else:    
-            addr += int(val)
-    elif op == "acc":
-        accm += int(val)
-        addr += 1
-    else:
-        if data[addr+int(val)] == data[inlen-1]:
-            addr += int(val)
+swapList = []
+cmdSwap = {"nop": "jmp", "jmp": "nop"}
+
+def runner(instructions):
+    addr,accm = 0,0
+    while True:
+        inlen = len(instructions)
+        op,val,inc = instructions[addr]
+        val = int(val)
+        if addr == len(data)-1:
+            return (f"boot success! code: {accm}")
+        elif inc == 1:
+            return f"infinite loop detected! code: {accm}"
+        instructions[addr][2] += 1
+        if op == "jmp":  
+            addr += val
+        elif op == "acc":
+            accm += val
+            addr += 1
         else:
             addr += 1
-print(accm)
 
-#TODO: Try running alternate instruction sets recursively
+print(runner(deepcopy(data)))
+print("fixing instruction set...")
+for index in range(len(data)):
+    if data[index][0] == "jmp" or data[index][0] == "nop":
+        swapList.append((index,data[index]))
+
+for ind, cmd in swapList:
+    dalt = deepcopy(data)
+    dalt[ind][0] = cmdSwap[cmd[0]]
+    result = runner(dalt)
+    if "success" in result:
+        print(result)
+        break
     
