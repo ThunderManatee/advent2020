@@ -22,40 +22,29 @@ wayp = {"N": 1, "E": 10, "S": 0, "W": 0}
 xpos, ypos = 0, 0
 for item in data:
     cmd, amt = item[0], int(item[1:])
+    tmp = {"N": 0, "E": 0, "S": 0, "W": 0}
     if cmd in move.keys():
         wayp[cmd] += amt
-        ydelta = wayp["N"] - wayp["S"]
-        xdelta = wayp["E"] - wayp["W"]
-        if ydelta > 0:
-            wayp["N"], wayp["S"] = abs(ydelta), 0
-        elif ydelta < 0:
-            wayp["S"], wayp["N"] = abs(ydelta), 0
-        else:
-            wayp["N"], wayp["S"] = 0, 0
-        
-        if xdelta > 0:
-            wayp["E"], wayp["W"] = abs(xdelta), 0
-        elif xdelta < 0:
-            wayp["W"], wayp["E"] = abs(xdelta), 0
-        else:
-            wayp["E"], wayp["W"] = 0, 0
+        xdelta, ydelta = wayp["E"] - wayp["W"], wayp["N"] - wayp["S"]
+        wdelta = {"N": ydelta, "E": xdelta, "S": -ydelta, "W": -xdelta}
+        for d, a in wdelta.items():
+            if a < 0 or a == 0:
+                wayp[d] = 0
+            else:
+                wayp[d] = a
     elif cmd == "F":
         for card in movekeys:
             move[card] += amt*wayp[card]
     elif cmd == "R":
-        tmp = [0, 0, 0, 0]
         s = amt/90
         for i in range(4):
-            tmp[int((i+s)%4)] = wayp[movekeys[i]]
-        for i in range(4):
-            wayp[movekeys[i]] = tmp[i]
+            tmp[movekeys[int((i+s)%4)]] = wayp[movekeys[i]]
+        wayp = tmp
     elif cmd == "L":
-        tmp = [0, 0, 0, 0]
         s = amt/90
         for i in range(4):
-            tmp[int(i-s)] = wayp[movekeys[i]]
-        for i in range(4):
-            wayp[movekeys[i]] = tmp[i]
+            tmp[movekeys[int(i-s)]] = wayp[movekeys[i]]
+        wayp = tmp
 xpos = abs(move["N"] - move["S"])
 ypos = abs(move["E"] - move["W"])
 print(f"Distance from start by waypoint: {xpos+ypos}")
