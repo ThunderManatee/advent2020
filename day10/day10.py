@@ -37,7 +37,6 @@ def build_chain(val, inputs, result):
             build_chain(adapter, inputs, result)
 
 data.sort()
-print(data)
 joltF, j1, j3 = 0, 0, 0
 for j in data:
     if j - 1 == joltF:
@@ -46,9 +45,7 @@ for j in data:
         j3 += 1
     joltF = j
 j3 += 1
-data.sort()
 clusters = build_clusters(data)
-print(clusters)
 results = {}
 for index, cluster in clusters.items():
     results[index] = {"combos": 0}
