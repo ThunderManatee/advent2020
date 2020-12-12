@@ -26,10 +26,10 @@ def get_sight_map(boat, adj):
                             break
     return boatDict
 
-def seat_checker(map, data , oCheck):
-    oldChart = deepcopy(data)
+def seat_checker(map, data, oCheck):
+    oldChart = []
     newChart = deepcopy(data)
-    while True:
+    while oldChart != newChart:
         occCount = 0
         oldChart = deepcopy(newChart)
         for (x, y), checks in map.items():
@@ -45,8 +45,6 @@ def seat_checker(map, data , oCheck):
                 newChart[x][y] = "L"
             elif seat == "#" and dirtyDegens < oCheck:
                 occCount += 1
-        if newChart == oldChart:
-            break
     return occCount
 
 print(f"Predicted Occupied Seats: {seat_checker(get_sight_map(data, True), data, 4)}")
