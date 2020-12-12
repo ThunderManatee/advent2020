@@ -27,22 +27,21 @@ def get_sight_map(boat, adj):
     return boatDict
 
 def seat_checker(map, data, oCheck):
-    oldChart = []
-    newChart = deepcopy(data)
-    while oldChart != newChart:
+    baseChart, deltaChart = [], deepcopy(data)
+    while baseChart != deltaChart:
         occCount = 0
-        oldChart = deepcopy(newChart)
+        baseChart = deepcopy(deltaChart)
         for (x, y), checks in map.items():
-            seat = oldChart[x][y]
+            seat = baseChart[x][y]
             dirtyDegens = 0
             for i,j in checks:
-                if oldChart[i][j] == "#":
+                if baseChart[i][j] == "#":
                     dirtyDegens += 1
             if seat == "L" and dirtyDegens == 0:
-                newChart[x][y] = "#"
+                deltaChart[x][y] = "#"
                 occCount += 1
             elif seat == "#" and dirtyDegens >= oCheck:
-                newChart[x][y] = "L"
+                deltaChart[x][y] = "L"
             elif seat == "#" and dirtyDegens < oCheck:
                 occCount += 1
     return occCount
