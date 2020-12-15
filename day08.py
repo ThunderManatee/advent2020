@@ -9,7 +9,6 @@ cmdSwap = {"nop": "jmp", "jmp": "nop"}
 def runner(instructions):
     addr,accm = 0,0
     while True:
-        inlen = len(instructions)
         op,val,inc = instructions[addr]
         val = int(val)
         if addr == len(data)-1:
