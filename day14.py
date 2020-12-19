@@ -1,10 +1,8 @@
 from aocd import get_data
 from itertools import product
-from copy import deepcopy
 data = get_data(day=14, year=2020).splitlines()
 
 def generate_decs(breg, combl):
-    #print(breg, combl)
     declist = []
     for p in combl:
         treg = []
